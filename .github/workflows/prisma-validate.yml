@@ -29,5 +29,5 @@ jobs:
 
       - name: Check migration status (dry-run)
         env:
-          DIRECT_URL: ${{ secrets.SUPABASE_DIRECT_DB_URL }}
+          directUrl: ${{ secrets.SUPABASE_DB_URL }}
         run: npx prisma migrate status --schema=prisma/schema.prisma
