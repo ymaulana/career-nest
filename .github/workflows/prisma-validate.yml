@@ -1,0 +1,33 @@
+name: Prisma Schema Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate Prisma schema
+        run: npx prisma validate
+
+      - name: Check Prisma format
+        run: npx prisma format --check
+
+      - name: Check migration status (dry-run)
+        env:
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+        run: npx prisma migrate status --schema=prisma/schema.prisma
